@@ -4,6 +4,7 @@ public class TicTacToeBoard {
 	public int moves;
 	public int winner;
 	public int turn;
+	public int level;
 
 	public TicTacToeBoard() {
 		cell = new int[TicTacToeGame.ROWS][TicTacToeGame.COLS];
@@ -13,6 +14,7 @@ public class TicTacToeBoard {
 	public void init() {
 		moves = 0;
 		winner = 0;
+		level = 0;
 		turn = 1;
 		for (int r = 0; r < TicTacToeGame.ROWS; r++)
 			for (int c = 0; c < TicTacToeGame.COLS; c++)
@@ -23,6 +25,7 @@ public class TicTacToeBoard {
 		moves = b.moves;
 		winner = b.winner;
 		turn = b.turn;
+		level = b.level;
 		for (int r = 0; r < TicTacToeGame.ROWS; r++)
 			for (int c = 0; c < TicTacToeGame.COLS; c++)
 				cell[r][c] = b.cell[r][c];
@@ -40,6 +43,7 @@ public class TicTacToeBoard {
 								row + "," + col + ")");
 		cell[row][col] = turn;
 		moves++;
+		level++;
 		turn = -turn;
 		winner = checkForWinner();
 	} // makeMove()
@@ -55,6 +59,7 @@ public class TicTacToeBoard {
 		cell[row][col] = 0;
 		moves--;
 		turn = -turn;
+		level--;
 		winner = checkForWinner();
 	} // unmakeMove()
 
