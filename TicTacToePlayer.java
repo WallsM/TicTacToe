@@ -13,12 +13,28 @@ class TicTacToePlayer {
 		board = new TicTacToeBoard();
 	} // constructor
 
+	public void printBoard(TicTacToeBoard b){
+		for(int i = 0; i < 3; i++){
+			for(int j = 0; j < 3; j++){
+				System.out.print(b.cell[i][j] + " | ");
+			}
+			System.out.println("");
+		}
+
+	}
+
 	// Computer player: calls minimax algorithm to search complete game tree
 	public void makeMove() {
 		game.copy(board);	// Get a local copy of the TicTacToeBoard object
 							// for use in the minimax search
+		int[] result = new int[3];
+		try{
+			result = max(board);
+		}catch(ArrayIndexOutOfBoundsException e){
+			System.out.println( "THE EXCEPTION: " +e.getMessage());
 
-		int[] result = max(board);
+		}
+
 		System.out.println("this runs");
 		game.makeMove(result[0], result[1], computerPlayer);  // execute the move
 
@@ -36,14 +52,18 @@ class TicTacToePlayer {
 		for(int[] a: actions(board)){
 			System.out.println("test max move " + a[0] + ", " + a[1]);
 			board.makeMove(a[0], a[1], this.computerPlayer);
+			System.out.println("max making move");
+			printBoard(board);
 			int value = min(board)[2];
 			if(value > best[2]){
 				best = new int[] {a[0], a[1], value};
 				System.out.println("best max move " + best[0] + ", " + best[1]);
 			}
-			board.unmakeMove(a[1], a[2]);
+			board.unmakeMove(a[0], a[1]);
+			System.out.println("max unmaking move");
+			printBoard(board);
 		}
-		System.out.println("max return best " + best[0] + ", " + best[1] + " utility " + best[3]);
+		System.out.println("max return best " + best[0] + ", " + best[1] + " utility " + best[2]);
 		return best;
 	}
 
@@ -55,13 +75,15 @@ class TicTacToePlayer {
 		}
 		int[] best = new int[] {0, 0, Integer.MAX_VALUE};
 
-		for(int[] a: actions(board)){
+		for(int[] a: actions(board)){//if null?
 			System.out.println("possible action " + a[0] + ", " + a[1]);
 		}
 		for(int[] a: actions(board)){
 
 			System.out.println("test min move " + a[0] + ", " + a[1]);
 			board.makeMove(a[0], a[1], -this.computerPlayer);
+			System.out.println("min making move");
+			printBoard(board);
 			int value = max(board)[2];
 			System.out.println("best min" + best[2]);
 			if(value < best[2]){
@@ -70,9 +92,11 @@ class TicTacToePlayer {
 			}
 
 			board.unmakeMove(a[0], a[1]);
+			System.out.println("min unmaking move");
+			printBoard(board);
 			System.out.println("removed " + a[0] + ", " + a[1]);
 		}
-		System.out.println("min return best " + best[0] + ", " + best[1] + " utility " + best[3]);
+		System.out.println("min return best " + best[0] + ", " + best[1] + " utility " + best[2]);
 		return best;
 	}
 
